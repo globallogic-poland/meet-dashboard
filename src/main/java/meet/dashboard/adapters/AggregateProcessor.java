@@ -1,25 +1,29 @@
 package meet.dashboard.adapters;
 
+import meet.dashboard.model.Disease;
+import meet.dashboard.model.Visit;
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
-import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
-import reactor.core.publisher.Flux;
+import org.springframework.messaging.handler.annotation.SendTo;
 
-import java.time.Duration;
+import static meet.dashboard.ports.DashboardBindings.*;
 
 @EnableBinding(Processor.class)
 public class AggregateProcessor {
 
     @StreamListener
-    @Output(Processor.OUTPUT)
-    public Flux<String> aggregate(@Input(Processor.INPUT) Flux<String> inbound) {
-        return inbound.
-                log()
-                .window(Duration.ofSeconds(5), Duration.ofSeconds(5))
-                .flatMap(w -> w.reduce("", (s1, s2) -> s1 + " " + s2))
-                .log();
+    @SendTo(VISITS_AFTER_AGGREGATION)
+    public KStream<Disease, Long> visitsByDisease(@Input(VISITS_BEFORE_AGGREGATION) KStream<String, Visit> events) {
+        return events
+                .map((key, value) -> new KeyValue<>(value.getDiagnosedDisease(), "0"))
+                .groupByKey()
+                .count(Materialized.as(VISITS_STATISTICS_VIEW))
+                .toStream();
     }
 
 }

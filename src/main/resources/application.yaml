@@ -2,11 +2,11 @@ spring:
   cloud:
     stream:
       bindings:
-        output:
-          destination: transformed
-        test-sink:
-          destination: transformed
-        input:
-          destination: testtock
-        test-source:
-          destination: testtock
+
+        visits-after-aggregation:
+          destination: visits-after-aggregation
+
+        visits-before-aggregation:
+          destination: visits-before-aggregation
+
+  }
