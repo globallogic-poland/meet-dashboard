@@ -26,5 +26,18 @@ public class AggregateProcessor {
                 .toStream();
     }
 
+//    @StreamListener
+//    @SendTo(PAGE_COUNTS_OUT)
+//    public KStream<String, Long> process(@Input(VISITS_BEFORE_AGGREGATION) KStream<String, Visit> events) {
+//
+//        return events
+//                .peek((key, value) -> log.info("==== PEEK: k:{} v:{}", key, value))
+//                .filter((key, value) -> value.getDurationSpentOnPage() > 10)
+//                .map((key, value) -> new KeyValue<>(value.getPage(), "0"))
+//                .groupByKey()
+//                .count(Materialized.as(PAGE_COUNTS_MV))
+//                .toStream();
+//    }
+
 
 }

@@ -2,11 +2,10 @@ server:
   port: 31500
 
 spring:
-
   application:
     name: dashboard
 
-cloud:
+  cloud:
     stream:
       kafka:
         streams:
@@ -17,23 +16,13 @@ cloud:
                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 value:
                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              commit:
+                interval:
+                  ms: 1000
 
       bindings:
-
         visits-before-aggregation:
           destination: visits-for-statistics-ks
           consumer:
             header-mode: raw
-#          content-type: application/json
-#          consumer.use-native-decoding: true
-#          consumer.key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#          producer.key-serde: org.apache.kafka.common.serialization.Serdes$ByteArraySerde
-#          consumer.value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
-
-#        visits-after-aggregation:
-#          destination: visits-after-aggregation
-#          producer.use-native-encoding: true
-#          producer.key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-##          producer.key-serde: org.apache.kafka.common.serialization.Serdes$ByteArraySerde
-#          producer.value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
 
