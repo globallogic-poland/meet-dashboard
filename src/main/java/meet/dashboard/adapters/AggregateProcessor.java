@@ -16,8 +16,6 @@ import static meet.dashboard.ports.DashboardBindings.VISITS_STATISTICS_VIEW;
 public class AggregateProcessor {
 
     @StreamListener
-//    @SendTo(VISITS_AFTER_AGGREGATION)
-    //    public KStream<Disease, Long> visitsByDisease(@Input(VISITS_BEFORE_AGGREGATION) KStream<String, Visit> events) {
     public void visitsByDisease(@Input(VISITS_BEFORE_AGGREGATION) KStream<String, Visit> events) {
         events
                 .map((key, value) -> new KeyValue<>(value.getDiagnosedDisease().toString(), "0"))
